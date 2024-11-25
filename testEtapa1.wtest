@@ -1,0 +1,44 @@
+import profesionales.*
+import empresas.*
+import universidades.*
+
+describe "Test correspondiente a etapa1" {
+  const sanMartin = new Universidad(provincia = "Buenos Aires", honorariosRecomendados=3500)
+  const rosario = new Universidad(provincia = "Santa Fe", honorariosRecomendados=2800)
+  const corrientes = new Universidad(provincia = "Corrientes", honorariosRecomendados=4200)
+  const hurlingham = new Universidad(provincia = "Buenos Aires", honorariosRecomendados=8500)
+
+  const juana = new ProfesionalViculado(universidad = rosario)
+  const melina = new ProfesionalAsociado(universidad = corrientes)
+  const rocio = new ProfesionalLibre(universidad = hurlingham, honorario = 5000, provinciasDondeTrabaja = ["Santa Fe", "Cordoba", "Entre Rios"])
+  const luciana = new ProfesionalLibre(universidad = rosario, honorario = 3200, provinciasDondeTrabaja = ["Santa Fe", "Entre Rios"])
+
+  const empresa = new Empresa(profesional = [juana, melina, rocio, luciana], honorarioReferencia = 3500)
+  test "dos de sus profesionales estudiaron en Rosario, uno en Hurlingham, ninguno (o sea cero) en San Martín." {
+    assert.equals(2, empresa.cuantosEstudiaronEn(rosario))
+    assert.equals(1, empresa.cuantosEstudiaronEn(hurlingham))
+    assert.equals(0, empresa.cuantosEstudiaronEn(sanMartin))
+  }
+
+  test "como profesionales caros, solamente a Rocío" {
+    assert.equals(#{rocio}, empresa.profesionalesCaros())
+  }
+
+  test "universidades formadoras, a las de Rosario, Corrientes y Hurlingham" {
+    assert.equals(#{rosario, corrientes, hurlingham}, empresa.universidadesFormadoras())
+  }
+
+  test " profesional más barato a Juana." {
+    assert.equals(juana, empresa.profesionalMasBarato())  
+  }
+
+  test "Es de gente acotada" {
+    assert.that(empresa.esDeGenteAcotada())
+  }
+
+  test "Esta empresa es de gente acotada. Pero si le agregamos a Luciana dos provincias más (p.ej. Corrientes y Misiones)" {
+    luciana.agregarProvincia("Corrientes")
+    luciana.agregarProvincia("Misioones")
+    assert.notThat(empresa.esDeGenteAcotada())
+  }
+}
