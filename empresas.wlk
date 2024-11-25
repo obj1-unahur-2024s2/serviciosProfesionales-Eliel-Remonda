@@ -41,7 +41,7 @@ class Empresa{
     }
     method esProfesionalPocoAtractivo(unProfesional){
         const prof = unProfesional.provinciasDondeTrabaja().asSet()
-        const otroProf = profesional.find({p => p.provinciasDondeTrabaja().asSet() == prof and p != unProfesional})
+        const otroProf = profesional.find({p => p.provinciasDondeTrabaja().asSet() == prof})
         return otroProf.any({p => p.honorario() < unProfesional.honorario()})
     }
 }
